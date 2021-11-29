@@ -2,11 +2,12 @@
 
 namespace JMS\JobQueueBundle\Tests\Functional\TestBundle\Command;
 
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputInterface;
 
-class SometimesFailingCommand extends \Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand
+class SometimesFailingCommand extends Command
 {
     protected function configure()
     {
@@ -16,7 +17,7 @@ class SometimesFailingCommand extends \Symfony\Bundle\FrameworkBundle\Command\Co
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $expired = time() - $input->getArgument('time');
 
