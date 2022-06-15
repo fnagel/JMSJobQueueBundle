@@ -89,7 +89,7 @@ class Job
     const PRIORITY_DEFAULT = 0;
     const PRIORITY_HIGH = 5;
 
-    /** @ORM\Id @ORM\GeneratedValue(strategy = "AUTO") @ORM\Column(type = "bigint", options = {"unsigned": true}) */
+    /** @ORM\Id @ORM\GeneratedValue(strategy = "IDENTITY") @ORM\Column(type = "bigint", options = {"unsigned": true}) */
     private $id;
 
     /** @ORM\Column(type = "string", length = 15) */
@@ -122,7 +122,7 @@ class Job
     /** @ORM\Column(type = "string") */
     private $command;
 
-    /** @ORM\Column(type = "json_array") */
+    /** @ORM\Column(type = "json") */
     private $args;
 
     /**

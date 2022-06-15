@@ -2,7 +2,7 @@
 
 namespace JMS\JobQueueBundle\Command;
 
-use Doctrine\Common\Persistence\ManagerRegistry;
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Doctrine\DBAL\Connection;
 use Doctrine\ORM\EntityManager;
 use JMS\JobQueueBundle\Entity\Job;
@@ -19,7 +19,7 @@ class CleanUpCommand extends Command
     private $jobManager;
     private $registry;
 
-    public function __construct(ManagerRegistry $registry, JobManager $jobManager)
+    public function __construct(Registry $registry, JobManager $jobManager)
     {
         parent::__construct();
 
@@ -37,7 +37,7 @@ class CleanUpCommand extends Command
         ;
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    protected function execute(InputInterface $input, OutputInterface $output): int
     {
         /** @var EntityManager $em */
         $em = $this->registry->getManagerForClass(Job::class);
@@ -45,6 +45,8 @@ class CleanUpCommand extends Command
 
         $this->cleanUpExpiredJobs($em, $con, $input);
         $this->collectStaleJobs($em);
+
+        return 0;
     }
 
     private function collectStaleJobs(EntityManager $em)
@@ -97,7 +99,7 @@ class CleanUpCommand extends Command
             $count++;
 
             $result = $con->executeQuery($incomingDepsSql, array('id' => $job->getId()));
-            if ($result->fetchColumn() !== false) {
+            if ($result->fetchOne() !== false) {
                 $em->transactional(function() use ($em, $job) {
                     $this->resolveDependencies($em, $job);
                     $em->remove($job);
