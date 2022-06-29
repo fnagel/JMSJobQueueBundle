@@ -36,7 +36,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      *
      * @return array<object> The PHP array representation of this collection.
      */
-    public function toArray()
+    public function toArray(): array
     {
         $this->initialize();
 
@@ -135,7 +135,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param mixed $offset
      * @return bool
      */
-    public function offsetExists($offset)
+    public function offsetExists(mixed $offset): bool
     {
         $this->initialize();
 
@@ -150,7 +150,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param mixed $offset
      * @return mixed
      */
-    public function offsetGet($offset)
+    public function offsetGet(mixed $offset): mixed
     {
         $this->initialize();
 
@@ -167,7 +167,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param mixed $value
      * @return bool
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet(mixed $offset, mixed $value): void
     {
         throw new \LogicException('Adding new related entities is not supported after initial creation.');
     }
@@ -180,7 +180,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param mixed $offset
      * @return mixed
      */
-    public function offsetUnset($offset)
+    public function offsetUnset(mixed $offset): void
     {
         throw new \LogicException('unset() is not supported.');
     }
@@ -261,7 +261,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param mixed $key The key.
      * @return mixed The element or NULL, if no element exists for the given key.
      */
-    public function get($key)
+    public function get(mixed $key): mixed
     {
         $this->initialize();
 
@@ -276,7 +276,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      *
      * @return array
      */
-    public function getKeys()
+    public function getKeys(): array
     {
         $this->initialize();
 
@@ -288,7 +288,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      *
      * @return array
      */
-    public function getValues()
+    public function getValues(): array
     {
         $this->initialize();
 
@@ -302,7 +302,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      *
      * @return integer The number of elements in the collection.
      */
-    public function count()
+    public function count(): int
     {
         $this->initialize();
 
@@ -317,8 +317,9 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      *
      * @param mixed $key
      * @param mixed $value
+     * @return void
      */
-    public function set($key, $value)
+    public function set(mixed $key, mixed $value)
     {
         throw new \LogicException('set() is not supported.');
     }
@@ -329,7 +330,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param mixed $value
      * @return boolean Always TRUE.
      */
-    public function add($value)
+    public function add(mixed $value)
     {
         throw new \LogicException('Adding new entities is not supported after creation.');
     }
@@ -341,7 +342,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      *
      * @return boolean TRUE if the collection is empty, FALSE otherwise.
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         $this->initialize();
 
@@ -353,7 +354,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      *
      * @return ArrayIterator
      */
-    public function getIterator()
+    public function getIterator(): ArrayIterator
     {
         $this->initialize();
 
@@ -367,7 +368,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param Closure $func
      * @return Collection
      */
-    public function map(Closure $func)
+    public function map(Closure $func): Collection
     {
         $this->initialize();
 
@@ -381,7 +382,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param Closure $p The predicate used for filtering.
      * @return Collection A collection with the results of the filter operation.
      */
-    public function filter(Closure $p)
+    public function filter(Closure $p): Collection
     {
         $this->initialize();
 
@@ -395,7 +396,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param Closure $p The predicate.
      * @return boolean TRUE, if the predicate yields TRUE for all elements, FALSE otherwise.
      */
-    public function forAll(Closure $p)
+    public function forAll(Closure $p): bool
     {
         $this->initialize();
 
@@ -417,7 +418,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      *               of elements where the predicate returned TRUE, the second element
      *               contains the collection of elements where the predicate returned FALSE.
      */
-    public function partition(Closure $p)
+    public function partition(Closure $p): array
     {
         $this->initialize();
 
@@ -445,7 +446,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
     /**
      * Clears the collection.
      */
-    public function clear()
+    public function clear(): void
     {
         throw new \LogicException('clear() is not supported.');
     }
@@ -461,7 +462,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param int $length
      * @return array
      */
-    public function slice($offset, $length = null)
+    public function slice($offset, $length = null): array
     {
         $this->initialize();
 
@@ -475,7 +476,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
      * @param  Criteria $criteria
      * @return Collection
      */
-    public function matching(Criteria $criteria)
+    public function matching(Criteria $criteria): Collection
     {
         $this->initialize();
 
