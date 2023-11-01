@@ -127,6 +127,16 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
         throw new \LogicException('removeElement() is not supported.');
     }
 
+    public function findFirst(Closure $p)
+    {
+        throw new \LogicException('findFirst() is not supported.');
+    }
+
+    public function reduce(Closure $func, mixed $initial = null)
+    {
+        throw new \LogicException('reduce() is not supported.');
+    }
+
     /**
      * ArrayAccess implementation of offsetExists()
      *
@@ -514,7 +524,7 @@ class PersistentRelatedEntitiesCollection implements Collection, Selectable
             return;
         }
 
-        $con = $this->registry->getManagerForClass(Job::class)->getConnection();
+        $con = $this->registry->getManagerForClass('JMSJobQueueBundle:Job')->getConnection();
         $entitiesPerClass = array();
         $count = 0;
         foreach ($con->query("SELECT related_class, related_id FROM jms_job_related_entities WHERE job_id = ".$this->job->getId())->iterateAssociative() as $data) {
