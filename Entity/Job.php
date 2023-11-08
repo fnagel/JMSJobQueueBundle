@@ -590,8 +590,18 @@ class Job
         $this->stackTrace = $ex;
     }
 
-    public function getStackTrace()
+    public function getStackTrace(): FlattenException|null|false
     {
+        if ($this->stackTrace !== null) {
+            try {
+                // This will fail for legacy Symfony\Component\ErrorHandler\Exception\FlattenException class.
+                // Only happens for old job records with above class as stack trace exception.
+                $this->stackTrace->toArray();
+            } catch (\Error|\Exception) {
+                return false;
+            }
+        }
+
         return $this->stackTrace;
     }
 

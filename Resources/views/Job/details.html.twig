@@ -121,46 +121,49 @@
         {% endfor %}
     </tbody>
 </table>
-
 {% endif %}
 
-{% if job.stackTrace is not empty %}
+{% if job.stackTrace is not null %}
 <h3>Stack Trace</h3>
-{% for index, exception in job.stackTrace.toarray %}
-    <div class="trace trace-as-html">
-        <div class="trace-details">
-            <div class="trace-head">
-            <span class="sf-toggle" data-toggle-selector="#trace-html-{{ index }}" data-toggle-initial="{{ loop.first ? "display" }}">
-                <h3 class="trace-class">
-                    <span class="trace-namespace">
-                        {{ exception.class|split('\\')|slice(0, -1)|join('\\') }}
-                        {{- exception.class|split('\\')|length > 1 ? '\\' }}
-                    </span>
-                    {{ exception.class|split('\\')|last }}
+<div class="trace trace-as-html">
+    {% if job.stackTrace is same as(false) %}
+        <pre>Stacktrace contains legacy classes and can't be displayed.</pre>
+    {% else %}
+        {% for index, exception in job.stackTrace.toarray %}
+            <div class="trace-details">
+                <div class="trace-head">
+                <span class="sf-toggle" data-toggle-selector="#trace-html-{{ index }}" data-toggle-initial="{{ loop.first ? "display" }}">
+                    <h3 class="trace-class">
+                        <span class="trace-namespace">
+                            {{ exception.class|split('\\')|slice(0, -1)|join('\\') }}
+                            {{- exception.class|split('\\')|length > 1 ? '\\' }}
+                        </span>
+                        {{ exception.class|split('\\')|last }}
 
-                    <span class="icon icon-close">[-]</span>
-                    <span class="icon icon-open">[+]</span>
-                </h3>
+                        <span class="icon icon-close">[-]</span>
+                        <span class="icon icon-open">[+]</span>
+                    </h3>
 
-                {% if exception.message is not empty and index > 1 %}
-                    <p class="break-long-words trace-message">{{ exception.message }}</p>
-                {% endif %}
-            </span>
+                    {% if exception.message is not empty and index > 1 %}
+                        <p class="break-long-words trace-message">{{ exception.message }}</p>
+                    {% endif %}
+                </span>
+                </div>
+
+                <div id="trace-html-{{ index }}" class="sf-toggle-content">
+                    {% set _is_first_user_code = true %}
+                    {% for i, trace in exception.trace %}
+                        {% set _display_code_snippet = _is_first_user_code and ('/vendor/' not in trace.file) and ('/var/cache/' not in trace.file) and (trace.file is not empty) %}
+                        {% if _display_code_snippet %}{% set _is_first_user_code = false %}{% endif %}
+                        <div class="trace-line">
+                            {{ include('@Twig/Exception/trace.html.twig', { prefix: index, i: i, trace: trace, _display_code_snippet: _display_code_snippet }, with_context = false) }}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
-
-            <div id="trace-html-{{ index }}" class="sf-toggle-content">
-                {% set _is_first_user_code = true %}
-                {% for i, trace in exception.trace %}
-                    {% set _display_code_snippet = _is_first_user_code and ('/vendor/' not in trace.file) and ('/var/cache/' not in trace.file) and (trace.file is not empty) %}
-                    {% if _display_code_snippet %}{% set _is_first_user_code = false %}{% endif %}
-                    <div class="trace-line">
-                        {{ include('@Twig/Exception/trace.html.twig', { prefix: index, i: i, trace: trace, _display_code_snippet: _display_code_snippet }, with_context = false) }}
-                    </div>
-                {% endfor %}
-            </div>
-        </div>
-    </div>
-{% endfor %}
+        {% endfor %}
+    {% endif %}
+</div>
 {% endif %}
 
 {% if job.output is not empty %}
