@@ -5,7 +5,7 @@
 
 {% block stylesheets %}
     <style type="text/css">
-        {% include "@Twig/exception.css.twig" %}
+        {% include "@JMSJobQueue/Twig/exception.css.twig" %}
 
         .trace-code {
             padding-left:30px;
@@ -138,8 +138,8 @@
                     </span>
                     {{ exception.class|split('\\')|last }}
 
-                    <span class="icon icon-close">{{ include('@Twig/images/icon-minus-square-o.svg') }}</span>
-                    <span class="icon icon-open">{{ include('@Twig/images/icon-plus-square-o.svg') }}</span>
+                    <span class="icon icon-close">[-]</span>
+                    <span class="icon icon-open">[+]</span>
                 </h3>
 
                 {% if exception.message is not empty and index > 1 %}
@@ -204,7 +204,7 @@
     </script>
     {% endif %}
 
-    {% include "@Twig/base_js.html.twig" %}
+    {% include "@JMSJobQueue/Twig/base_js.html.twig" %}
 
     <script>
         $(document).ready(function() {
