@@ -29,7 +29,9 @@
 {%- endmacro %}
 
 {% macro ago(time, format) -%}
-    <time class="timeago" datetime="{{ time.format(constant("DateTime::ISO8601")) }}">{{ time.format(format|default("Y-m-d H:i:s")) }}</time>
+    {% if time is not empty %}
+        <time class="timeago" datetime="{{ time.format(constant("DateTime::ISO8601")) }}">{{ time.format(format|default("Y-m-d H:i:s")) }}</time>
+    {% endif %}
 {%- endmacro %}
 
 {% macro runtime(job) -%}
