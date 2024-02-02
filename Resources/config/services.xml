@@ -35,6 +35,7 @@
         <service id="JMS\JobQueueBundle\Controller\JobController" autoconfigure="true" autowire="true">
             <tag name="controller.service_arguments" />
             <argument type="service" key="$jobManager" id="jms_job_queue.job_manager" />
+            <argument type="service" key="$doctrine" id="doctrine" />
         </service>
     </services>
 </container>

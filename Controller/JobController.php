@@ -4,6 +4,7 @@ namespace JMS\JobQueueBundle\Controller;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use JMS\JobQueueBundle\Entity\Job;
 use JMS\JobQueueBundle\Entity\Repository\JobManager;
 use JMS\JobQueueBundle\View\JobFilter;
@@ -15,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class JobController extends AbstractController
 {
-    public function __construct(protected JobManager $jobManager)
+    public function __construct(protected JobManager $jobManager, protected ManagerRegistry $doctrine)
     {
     }
 
@@ -77,7 +78,7 @@ class JobController extends AbstractController
             $class = ClassUtils::getClass($entity);
             $relatedEntities[] = array(
                 'class' => $class,
-                'id' => json_encode($this->get('doctrine')->getManagerForClass($class)->getClassMetadata($class)->getIdentifierValues($entity)),
+                'id' => json_encode($this->doctrine->getManagerForClass($class)->getClassMetadata($class)->getIdentifierValues($entity)),
                 'raw' => $entity,
             );
         }
@@ -85,7 +86,7 @@ class JobController extends AbstractController
         $statisticData = $statisticOptions = array();
         if ($this->getParameter('jms_job_queue.statistics')) {
             $dataPerCharacteristic = array();
-            foreach ($this->get('doctrine')->getManagerForClass(Job::class)->getConnection()->query("SELECT * FROM jms_job_statistics WHERE job_id = ".$job->getId()) as $row) {
+            foreach ($this->getEm()->getConnection()->query("SELECT * FROM jms_job_statistics WHERE job_id = ".$job->getId()) as $row) {
                 $dataPerCharacteristic[$row['characteristic']][] = array(
                     // hack because postgresql lower-cases all column names.
                     array_key_exists('createdAt', $row) ? $row['createdAt'] : $row['createdat'],
@@ -155,7 +156,7 @@ class JobController extends AbstractController
 
     private function getEm(): EntityManager
     {
-        return $this->get('doctrine')->getManagerForClass(Job::class);
+        return $this->doctrine->getManagerForClass(Job::class);
     }
 
     private function getRepo(): JobManager
